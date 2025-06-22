@@ -9,6 +9,8 @@ Welcome to the Super Chat API documentation. This directory contains comprehensi
 - **[api-documentation.md](./api-documentation.md)** - Complete API reference with endpoints, parameters, and responses
 - **[database-documentation.md](./database-documentation.md)** - Database schema, tables, relationships, and design
 - **[setup-guide.md](./setup-guide.md)** - Step-by-step instructions for setting up and running the server
+- **[migration-guide.md](./migration-guide.md)** - Detailed guide for migrating from Firebase to the custom backend
+- **[api-integration-guide.md](./api-integration-guide.md)** - Guide for integrating with the Super Chat API
 
 ### Interactive Documentation
 
@@ -18,7 +20,7 @@ Welcome to the Super Chat API documentation. This directory contains comprehensi
 ### API Specification
 
 - **[openapi.yaml](./openapi.yaml)** - OpenAPI 3.0 specification file for the Super Chat API
-- **[superchat-api-collection.json](./superchat-api-collection.json)** - Postman collection for testing the API
+- **[Postman Collection](https://app.getpostman.com/join-team?invite_code=59a8683e2202ccfd347423701c779b64a8187c4d000cb4ca5e9f9a7c12b0cfc4&target_code=620c0d2c8d7ed99fb987fa931020702a)** - Join the Super Chat API Postman team
 
 ### Supporting Files
 
@@ -32,10 +34,11 @@ Welcome to the Super Chat API documentation. This directory contains comprehensi
 1. Start with the **setup-guide.md** to set up your development environment
 2. Review the **database-documentation.md** to understand the data model
 3. Use the **api-documentation.md** as a reference while developing
+4. Follow the **migration-guide.md** if transitioning from Firebase to the custom backend
 
 ### For API Testing
 
-1. Import the **superchat-api-collection.json** into Postman
+1. Join the [Postman Team](https://app.getpostman.com/join-team?invite_code=59a8683e2202ccfd347423701c779b64a8187c4d000cb4ca5e9f9a7c12b0cfc4&target_code=620c0d2c8d7ed99fb987fa931020702a) for testing the API
 2. Open **swagger-ui.html** in a browser for interactive API testing
 3. Use the OpenAPI specification for integration with other tools
 
@@ -49,8 +52,24 @@ Welcome to the Super Chat API documentation. This directory contains comprehensi
 To quickly get started with the Super Chat API:
 
 1. Follow the setup instructions in **setup-guide.md**
-2. Import the Postman collection from **superchat-api-collection.json**
+2. Join the [Postman Team](https://app.getpostman.com/join-team?invite_code=59a8683e2202ccfd347423701c779b64a8187c4d000cb4ca5e9f9a7c12b0cfc4&target_code=620c0d2c8d7ed99fb987fa931020702a) for API testing
 3. Use the collection to make API requests and explore the functionality
+
+## Migrating from Firebase
+
+If you're migrating from Firebase to the custom backend:
+
+1. Follow the detailed **migration-guide.md** for step-by-step instructions
+2. Update the Android app and admin panel as described in the guide
+3. Test all functionality after migration
+
+## API Integration
+
+For detailed information on integrating with the Super Chat API:
+
+1. Review the **api-integration-guide.md**
+2. Use the provided Swagger UI for interactive testing
+3. Join the Postman team for pre-configured API requests
 
 ## Viewing the Documentation
 
