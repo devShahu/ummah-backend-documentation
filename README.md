@@ -81,14 +81,6 @@ To view the HTML documentation, open the `index.html` file in a web browser:
 open index.html
 ```
 
-### Swagger UI
-
-To use the Swagger UI for interactive API testing, open the `swagger-ui.html` file in a web browser:
-
-```
-open swagger-ui.html
-```
-
 ## Contributing to Documentation
 
 If you find any issues or want to improve the documentation:
