@@ -1,0 +1,947 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Super Chat API",
+    "description": "API collection for the Super Chat backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Send OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_number\": \"+1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/send-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "send-otp"]
+            },
+            "description": "Sends an OTP (One-Time Password) to the provided phone number for authentication."
+          },
+          "response": []
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_number\": \"+1234567890\",\n  \"otp_code\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "verify-otp"]
+            },
+            "description": "Verifies the OTP sent to the user's phone number and returns a JWT token upon successful verification."
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "Invalidates the current JWT token."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "profile"]
+            },
+            "description": "Retrieves the authenticated user's profile information."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Name\",\n  \"email\": \"new_email@example.com\",\n  \"photo\": \"new_photo_url\",\n  \"status\": \"New status message\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "profile"]
+            },
+            "description": "Updates the authenticated user's profile information."
+          },
+          "response": []
+        },
+        {
+          "name": "Register Notification Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"device_token\",\n  \"device_id\": \"device_id\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/notification-token",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "notification-token"]
+            },
+            "description": "Registers a device token for push notifications."
+          },
+          "response": []
+        },
+        {
+          "name": "Unregister Notification Token",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"device_token\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/notification-token",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "notification-token"]
+            },
+            "description": "Unregisters a device token for push notifications."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for user authentication and profile management."
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users?page=1&limit=20&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieves a list of all users with pagination. Admin only."
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":userId"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "user_uuid",
+                  "description": "The UUID of the user to retrieve"
+                }
+              ]
+            },
+            "description": "Retrieves a specific user by their ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Verification Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"verified\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId/verification",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", ":userId", "verification"],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "user_uuid",
+                  "description": "The UUID of the user to update"
+                }
+              ]
+            },
+            "description": "Updates a user's verification status. Admin only."
+          },
+          "response": []
+        },
+        {
+          "name": "Block User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blocked_user_id\": \"user_uuid\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/block",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "block"]
+            },
+            "description": "Blocks a user."
+          },
+          "response": []
+        },
+        {
+          "name": "Unblock User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/block/:blockedUserId",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "block", ":blockedUserId"],
+              "variable": [
+                {
+                  "key": "blockedUserId",
+                  "value": "user_uuid",
+                  "description": "The UUID of the blocked user to unblock"
+                }
+              ]
+            },
+            "description": "Unblocks a previously blocked user."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Blocked Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/blocked",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "blocked"]
+            },
+            "description": "Retrieves a list of users blocked by the authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Report User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reported_user_id\": \"user_uuid\",\n  \"reason\": \"Inappropriate behavior\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/report",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "report"]
+            },
+            "description": "Reports a user for inappropriate behavior."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for user management."
+    },
+    {
+      "name": "Groups",
+      "item": [
+        {
+          "name": "Create Group",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Group Name\",\n  \"photo\": \"group_photo_url\",\n  \"only_admins_can_post\": false,\n  \"members\": [\"user_uuid1\", \"user_uuid2\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups"]
+            },
+            "description": "Creates a new group."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Groups by User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/groups/user",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", "user"]
+            },
+            "description": "Retrieves all groups that the authenticated user is a member of."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Group by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/groups/:groupId",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", ":groupId"],
+              "variable": [
+                {
+                  "key": "groupId",
+                  "value": "group_uuid",
+                  "description": "The UUID of the group to retrieve"
+                }
+              ]
+            },
+            "description": "Retrieves a specific group by its ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Group",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Group Name\",\n  \"photo\": \"updated_group_photo_url\",\n  \"only_admins_can_post\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups/:groupId",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", ":groupId"],
+              "variable": [
+                {
+                  "key": "groupId",
+                  "value": "group_uuid",
+                  "description": "The UUID of the group to update"
+                }
+              ]
+            },
+            "description": "Updates a group's information."
+          },
+          "response": []
+        },
+        {
+          "name": "Add Group Member",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"user_uuid\",\n  \"is_admin\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups/:groupId/members",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", ":groupId", "members"],
+              "variable": [
+                {
+                  "key": "groupId",
+                  "value": "group_uuid",
+                  "description": "The UUID of the group to add a member to"
+                }
+              ]
+            },
+            "description": "Adds a new member to a group."
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Group Member",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/groups/:groupId/members/:userId",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", ":groupId", "members", ":userId"],
+              "variable": [
+                {
+                  "key": "groupId",
+                  "value": "group_uuid",
+                  "description": "The UUID of the group"
+                },
+                {
+                  "key": "userId",
+                  "value": "user_uuid",
+                  "description": "The UUID of the user to remove from the group"
+                }
+              ]
+            },
+            "description": "Removes a member from a group."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Member Admin Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_admin\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups/:groupId/members/:userId/admin",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", ":groupId", "members", ":userId", "admin"],
+              "variable": [
+                {
+                  "key": "groupId",
+                  "value": "group_uuid",
+                  "description": "The UUID of the group"
+                },
+                {
+                  "key": "userId",
+                  "value": "user_uuid",
+                  "description": "The UUID of the user to update admin status for"
+                }
+              ]
+            },
+            "description": "Updates a group member's admin status."
+          },
+          "response": []
+        },
+        {
+          "name": "Report Group",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Inappropriate content\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/groups/:groupId/report",
+              "host": ["{{baseUrl}}"],
+              "path": ["groups", ":groupId", "report"],
+              "variable": [
+                {
+                  "key": "groupId",
+                  "value": "group_uuid",
+                  "description": "The UUID of the group to report"
+                }
+              ]
+            },
+            "description": "Reports a group for inappropriate content."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for group management."
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Admin Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin_username\",\n  \"password\": \"admin_password\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "login"]
+            },
+            "description": "Authenticates an admin user and returns a JWT token."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "stats"]
+            },
+            "description": "Retrieves system statistics. Admin only."
+          },
+          "response": []
+        },
+        {
+          "name": "Get App Settings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "settings"]
+            },
+            "description": "Retrieves application settings. Admin only."
+          },
+          "response": []
+        },
+        {
+          "name": "Update App Settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"maintenance_mode\": false,\n  \"allow_user_registration\": true,\n  \"allow_group_creation\": true,\n  \"otp_expiry_minutes\": 5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "settings"]
+            },
+            "description": "Updates application settings. Admin only."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reported Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reported-users?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "reported-users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Retrieves a list of reported users. Admin only."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reported Groups",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reported-groups?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "reported-groups"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Retrieves a list of reported groups. Admin only."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"new_admin\",\n  \"email\": \"new_admin@example.com\",\n  \"password\": \"secure_password\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/admins",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "admins"]
+            },
+            "description": "Creates a new admin user. Admin only."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for administrative operations."
+    },
+    {
+      "name": "SMS",
+      "item": [
+        {
+          "name": "Get SMS Logs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/sms/logs?page=1&limit=20&phone_number=",
+              "host": ["{{baseUrl}}"],
+              "path": ["sms", "logs"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "phone_number",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieves SMS logs with pagination. Admin only."
+          },
+          "response": []
+        },
+        {
+          "name": "Check SMS Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/sms/balance",
+              "host": ["{{baseUrl}}"],
+              "path": ["sms", "balance"]
+            },
+            "description": "Checks the SMS account balance. Admin only."
+          },
+          "response": []
+        },
+        {
+          "name": "Send Custom SMS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_number\": \"+1234567890\",\n  \"message\": \"This is a custom SMS message.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/sms/send",
+              "host": ["{{baseUrl}}"],
+              "path": ["sms", "send"]
+            },
+            "description": "Sends a custom SMS message. Admin only."
+          },
+          "response": []
+        },
+        {
+          "name": "Check SMS Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/sms/status/:requestId",
+              "host": ["{{baseUrl}}"],
+              "path": ["sms", "status", ":requestId"],
+              "variable": [
+                {
+                  "key": "requestId",
+                  "value": "sms_request_id",
+                  "description": "The SMS request ID to check status for"
+                }
+              ]
+            },
+            "description": "Checks the delivery status of an SMS by request ID."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for SMS-related operations."
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "your_jwt_token",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "your_admin_jwt_token",
+      "type": "string"
+    }
+  ]
+}

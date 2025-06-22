@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Chat API Documentation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <h2>Super Chat API</h2>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search...">
+            </div>
+            <nav>
+                <ul id="navList">
+                    <li><a href="#overview" class="nav-link">Overview</a></li>
+                    <li><a href="#authentication" class="nav-link">Authentication</a></li>
+                    <li>
+                        <a href="#endpoints" class="nav-link">Endpoints</a>
+                        <ul>
+                            <li><a href="#auth-endpoints" class="nav-link">Authentication</a></li>
+                            <li><a href="#user-endpoints" class="nav-link">Users</a></li>
+                            <li><a href="#group-endpoints" class="nav-link">Groups</a></li>
+                            <li><a href="#admin-endpoints" class="nav-link">Admin</a></li>
+                            <li><a href="#sms-endpoints" class="nav-link">SMS</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#error-codes" class="nav-link">Error Codes</a></li>
+                    <li><a href="#postman" class="nav-link">Postman Collection</a></li>
+                    <li><a href="#openapi" class="nav-link">OpenAPI Spec</a></li>
+                    <li><a href="#setup" class="nav-link">Setup Guide</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="content">
+            <section id="overview">
+                <h1>Super Chat API Documentation</h1>
+                <p>This document provides comprehensive documentation for the Super Chat API, which powers the backend of the Super Chat Android application. The API is built using Node.js, Express, and PostgreSQL.</p>
+                
+                <h2>Base URL</h2>
+                <div class="code-block">
+                    <code>http://your-server-address:3000/api</code>
+                </div>
+                
+                <h2>Response Format</h2>
+                <p>All API responses follow a standard format:</p>
+                
+                <h3>Success Response</h3>
+                <pre><code class="language-json">{
+  "error": false,
+  "data": { ... },
+  "message": "Operation successful"
+}</code></pre>
+                
+                <h3>Error Response</h3>
+                <pre><code class="language-json">{
+  "error": true,
+  "message": "Error description"
+}</code></pre>
+                
+                <h2>Rate Limiting</h2>
+                <p>The API implements rate limiting to prevent abuse. By default, each IP address is limited to 100 requests per 15 minutes.</p>
+            </section>
+            
+            <section id="authentication">
+                <h1>Authentication</h1>
+                <p>The API uses JWT (JSON Web Token) for authentication. Most endpoints require a valid JWT token to be included in the request header.</p>
+                
+                <h2>Authentication Header</h2>
+                <div class="code-block">
+                    <code>Authorization: Bearer &lt;your_jwt_token&gt;</code>
+                </div>
+            </section>
+            
+            <section id="endpoints">
+                <h1>API Endpoints</h1>
+                
+                <section id="auth-endpoints">
+                    <h2>Authentication Endpoints</h2>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="path">/auth/send-otp</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <h3>Send OTP</h3>
+                            <p>Sends an OTP (One-Time Password) to the provided phone number for authentication.</p>
+                            
+                            <div class="subsection">
+                                <h4>Authentication</h4>
+                                <p>None</p>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Request Body</h4>
+                                <pre><code class="language-json">{
+  "phone_number": "+1234567890"
+}</code></pre>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Success Response</h4>
+                                <pre><code class="language-json">{
+  "error": false,
+  "message": "OTP sent successfully",
+  "data": {
+    "phone_number": "+1234567890",
+    "expires_in": 300
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="path">/auth/verify-otp</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <h3>Verify OTP</h3>
+                            <p>Verifies the OTP sent to the user's phone number and returns a JWT token upon successful verification.</p>
+                            
+                            <div class="subsection">
+                                <h4>Authentication</h4>
+                                <p>None</p>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Request Body</h4>
+                                <pre><code class="language-json">{
+  "phone_number": "+1234567890",
+  "otp_code": "123456"
+}</code></pre>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Success Response</h4>
+                                <pre><code class="language-json">{
+  "error": false,
+  "message": "OTP verified successfully",
+  "data": {
+    "token": "your_jwt_token",
+    "user": {
+      "id": "user_uuid",
+      "phone_number": "+1234567890",
+      "name": "User Name",
+      "email": "user@example.com",
+      "photo": "photo_url",
+      "status": "Hey there! I'm using Super Chat",
+      "verified": true,
+      "created_at": "2023-01-01T00:00:00.000Z"
+    }
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="path">/auth/logout</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <h3>Logout</h3>
+                            <p>Invalidates the current JWT token.</p>
+                            
+                            <div class="subsection">
+                                <h4>Authentication</h4>
+                                <p>Required</p>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Success Response</h4>
+                                <pre><code class="language-json">{
+  "error": false,
+  "message": "Logged out successfully"
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="path">/auth/profile</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <h3>Get Profile</h3>
+                            <p>Retrieves the authenticated user's profile information.</p>
+                            
+                            <div class="subsection">
+                                <h4>Authentication</h4>
+                                <p>Required</p>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Success Response</h4>
+                                <pre><code class="language-json">{
+  "error": false,
+  "data": {
+    "id": "user_uuid",
+    "phone_number": "+1234567890",
+    "name": "User Name",
+    "email": "user@example.com",
+    "photo": "photo_url",
+    "status": "Hey there! I'm using Super Chat",
+    "verified": true,
+    "created_at": "2023-01-01T00:00:00.000Z"
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method put">PUT</span>
+                            <span class="path">/auth/profile</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <h3>Update Profile</h3>
+                            <p>Updates the authenticated user's profile information.</p>
+                            
+                            <div class="subsection">
+                                <h4>Authentication</h4>
+                                <p>Required</p>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Request Body</h4>
+                                <pre><code class="language-json">{
+  "name": "New Name",
+  "email": "new_email@example.com",
+  "photo": "new_photo_url",
+  "status": "New status message"
+}</code></pre>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Success Response</h4>
+                                <pre><code class="language-json">{
+  "error": false,
+  "message": "Profile updated successfully",
+  "data": {
+    "id": "user_uuid",
+    "phone_number": "+1234567890",
+    "name": "New Name",
+    "email": "new_email@example.com",
+    "photo": "new_photo_url",
+    "status": "New status message",
+    "verified": true,
+    "created_at": "2023-01-01T00:00:00.000Z",
+    "updated_at": "2023-01-02T00:00:00.000Z"
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="path">/auth/notification-token</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <h3>Register Notification Token</h3>
+                            <p>Registers a device token for push notifications.</p>
+                            
+                            <div class="subsection">
+                                <h4>Authentication</h4>
+                                <p>Required</p>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Request Body</h4>
+                                <pre><code class="language-json">{
+  "token": "device_token",
+  "device_id": "device_id"
+}</code></pre>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Success Response</h4>
+                                <pre><code class="language-json">{
+  "error": false,
+  "message": "Notification token registered successfully"
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method delete">DELETE</span>
+                            <span class="path">/auth/notification-token</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <h3>Unregister Notification Token</h3>
+                            <p>Unregisters a device token for push notifications.</p>
+                            
+                            <div class="subsection">
+                                <h4>Authentication</h4>
+                                <p>Required</p>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Request Body</h4>
+                                <pre><code class="language-json">{
+  "token": "device_token"
+}</code></pre>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Success Response</h4>
+                                <pre><code class="language-json">{
+  "error": false,
+  "message": "Notification token unregistered successfully"
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="user-endpoints">
+                    <h2>User Endpoints</h2>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="path">/users</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <h3>Get All Users</h3>
+                            <p>Retrieves a list of all users with pagination.</p>
+                            
+                            <div class="subsection">
+                                <h4>Authentication</h4>
+                                <p>Required (Admin only)</p>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Query Parameters</h4>
+                                <ul>
+                                    <li><code>page</code>: Page number (default: 1)</li>
+                                    <li><code>limit</code>: Number of users per page (default: 20)</li>
+                                    <li><code>search</code>: Search term for name or phone number</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Success Response</h4>
+                                <pre><code class="language-json">{
+  "error": false,
+  "data": {
+    "users": [
+      {
+        "id": "user_uuid",
+        "phone_number": "+1234567890",
+        "name": "User Name",
+        "email": "user@example.com",
+        "photo": "photo_url",
+        "status": "Hey there! I'm using Super Chat",
+        "verified": true,
+        "disabled": false,
+        "created_at": "2023-01-01T00:00:00.000Z"
+      },
+      // More users...
+    ],
+    "pagination": {
+      "total": 100,
+      "page": 1,
+      "limit": 20,
+      "pages": 5
+    }
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- More user endpoints would be added here -->
+                </section>
+                
+                <section id="group-endpoints">
+                    <h2>Group Endpoints</h2>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="path">/groups</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <h3>Create Group</h3>
+                            <p>Creates a new group.</p>
+                            
+                            <div class="subsection">
+                                <h4>Authentication</h4>
+                                <p>Required</p>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Request Body</h4>
+                                <pre><code class="language-json">{
+  "name": "Group Name",
+  "photo": "group_photo_url",
+  "only_admins_can_post": false,
+  "members": ["user_uuid1", "user_uuid2"]
+}</code></pre>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Success Response</h4>
+                                <pre><code class="language-json">{
+  "error": false,
+  "message": "Group created successfully",
+  "data": {
+    "id": "group_uuid",
+    "name": "Group Name",
+    "photo": "group_photo_url",
+    "only_admins_can_post": false,
+    "created_by": "user_uuid",
+    "created_at": "2023-01-01T00:00:00.000Z"
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- More group endpoints would be added here -->
+                </section>
+                
+                <section id="admin-endpoints">
+                    <h2>Admin Endpoints</h2>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method post">POST</span>
+                            <span class="path">/admin/login</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <h3>Admin Login</h3>
+                            <p>Authenticates an admin user and returns a JWT token.</p>
+                            
+                            <div class="subsection">
+                                <h4>Authentication</h4>
+                                <p>None</p>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Request Body</h4>
+                                <pre><code class="language-json">{
+  "username": "admin_username",
+  "password": "admin_password"
+}</code></pre>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Success Response</h4>
+                                <pre><code class="language-json">{
+  "error": false,
+  "message": "Login successful",
+  "data": {
+    "token": "admin_jwt_token",
+    "admin": {
+      "id": "admin_uuid",
+      "username": "admin_username",
+      "email": "admin@example.com"
+    }
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- More admin endpoints would be added here -->
+                </section>
+                
+                <section id="sms-endpoints">
+                    <h2>SMS Endpoints</h2>
+                    
+                    <div class="endpoint">
+                        <div class="endpoint-header">
+                            <span class="method get">GET</span>
+                            <span class="path">/sms/logs</span>
+                        </div>
+                        <div class="endpoint-content">
+                            <h3>Get SMS Logs</h3>
+                            <p>Retrieves SMS logs with pagination.</p>
+                            
+                            <div class="subsection">
+                                <h4>Authentication</h4>
+                                <p>Required (Admin only)</p>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Query Parameters</h4>
+                                <ul>
+                                    <li><code>page</code>: Page number (default: 1)</li>
+                                    <li><code>limit</code>: Number of logs per page (default: 20)</li>
+                                    <li><code>phone_number</code>: Filter by phone number</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="subsection">
+                                <h4>Success Response</h4>
+                                <pre><code class="language-json">{
+  "error": false,
+  "data": {
+    "logs": [
+      {
+        "id": "log_uuid",
+        "phone_number": "+1234567890",
+        "message": "Your OTP is 123456",
+        "request_id": "sms_request_id",
+        "status": "delivered",
+        "created_at": "2023-01-01T00:00:00.000Z"
+      },
+      // More logs...
+    ],
+    "pagination": {
+      "total": 5000,
+      "page": 1,
+      "limit": 20,
+      "pages": 250
+    }
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- More SMS endpoints would be added here -->
+                </section>
+            </section>
+            
+            <section id="error-codes">
+                <h1>Error Codes</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Status Code</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>400</td>
+                            <td>Bad Request - The request was malformed or contains invalid parameters</td>
+                        </tr>
+                        <tr>
+                            <td>401</td>
+                            <td>Unauthorized - Authentication is required or has failed</td>
+                        </tr>
+                        <tr>
+                            <td>403</td>
+                            <td>Forbidden - The authenticated user does not have permission to access the requested resource</td>
+                        </tr>
+                        <tr>
+                            <td>404</td>
+                            <td>Not Found - The requested resource was not found</td>
+                        </tr>
+                        <tr>
+                            <td>409</td>
+                            <td>Conflict - The request could not be completed due to a conflict with the current state of the resource</td>
+                        </tr>
+                        <tr>
+                            <td>429</td>
+                            <td>Too Many Requests - The user has sent too many requests in a given amount of time</td>
+                        </tr>
+                        <tr>
+                            <td>500</td>
+                            <td>Internal Server Error - An unexpected error occurred on the server</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            
+            <section id="postman">
+                <h1>Postman Collection</h1>
+                <p>A Postman collection is available for testing the API. You can import it using the button below:</p>
+                <div class="import-container">
+                    <button class="import-button" id="postmanImport">Import to Postman</button>
+                </div>
+                <div class="code-block">
+                    <code>https://www.postman.com/collections/your-collection-id</code>
+                </div>
+            </section>
+            
+            <section id="openapi">
+                <h1>OpenAPI Specification</h1>
+                <p>The OpenAPI specification for this API is available at:</p>
+                <div class="code-block">
+                    <code>http://your-server-address:3000/api-docs</code>
+                </div>
+                <div class="import-container">
+                    <button class="import-button" id="swaggerImport">View in Swagger UI</button>
+                </div>
+            </section>
+            
+            <section id="setup">
+                <h1>Setup Guide</h1>
+                <h2>Prerequisites</h2>
+                <ul>
+                    <li>Node.js (v16 or higher)</li>
+                    <li>PostgreSQL (v12 or higher)</li>
+                    <li>SMS.net.bd API credentials</li>
+                </ul>
+                
+                <h2>Installation Steps</h2>
+                <ol>
+                    <li>
+                        <p>Clone the repository</p>
+                    </li>
+                    <li>
+                        <p>Install dependencies</p>
+                        <pre><code class="language-bash">npm install</code></pre>
+                    </li>
+                    <li>
+                        <p>Create a PostgreSQL database</p>
+                    </li>
+                    <li>
+                        <p>Set up the database schema</p>
+                        <pre><code class="language-bash">psql -U your_username -d your_database_name -f database/schema.sql</code></pre>
+                    </li>
+                    <li>
+                        <p>Create a <code>.env</code> file based on <code>.env.example</code></p>
+                        <pre><code class="language-bash">cp .env.example .env</code></pre>
+                    </li>
+                    <li>
+                        <p>Update the <code>.env</code> file with your configuration</p>
+                    </li>
+                </ol>
+                
+                <h2>Running the Application</h2>
+                <h3>Development</h3>
+                <pre><code class="language-bash">npm run dev</code></pre>
+                
+                <h3>Production</h3>
+                <pre><code class="language-bash">npm start</code></pre>
+            </section>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
